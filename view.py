@@ -1,4 +1,4 @@
-# import model
+import model
 
 
 class View:
@@ -11,7 +11,7 @@ class View:
     p_high_sugar = 0.1
 
     def __init__ (self):
-        # self.cm = model.process()
+        self.cm = model.process()
         self.cm = [[9, 3], [1, 1]]
         self.calculate_e_value()
         
