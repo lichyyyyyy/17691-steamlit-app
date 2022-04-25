@@ -29,10 +29,13 @@ class View:
         p_s_ds = p_ds_s * p_s / p_ds
 
         ev_ns = (self.p_no_sugar * 80000 + self.p_typical_sugar * 117500 + self.p_high_sugar * 125000) * 12
-        ev_s = (self.p_botrytis * 80000 + (1-self.p_botrytis) * 117500) * 12
+        ev_s = (self.p_botrytis * 275000 + (1-self.p_botrytis) * 35000) * 12
         ev_h = 80000 * 12
 
-        self.e_value = p_dns * (p_ns_dns*ev_ns + (1-p_ns_dns)*ev_s) + p_ds * (p_s_ds*ev_s + (1-p_s_ds)*ev_ns)
+        ev_ds = max(ev_h, (p_s_ds*ev_s + (1-p_s_ds)*ev_ns))
+        ev_dns = max(ev_h, (p_ns_dns*ev_ns + (1-p_ns_dns)*ev_s))
+
+        self.e_value = p_dns * ev_dns + p_ds * ev_ds
 
         if self.e_value > ev_h:
             self.alternative = "Keep waiting"
