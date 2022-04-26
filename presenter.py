@@ -19,6 +19,7 @@ st.write(pview.e_value)
 
 # Display the alternative
 st.subheader('Recommended alternative')
-st.write(pview.alternative)
+st.write('If the detector detects a storm, then I suggest to '+pview.alternative_ds+';')
+st.write('Otherwise, I suggest to '+pview.alternative_dns+'.')
 
 

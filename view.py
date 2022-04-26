@@ -4,11 +4,12 @@ import model
 class View:
     cm = [[]]
     e_value = 0
-    alternative = ""
     p_botrytis = 0.1
     p_no_sugar = 0.6
     p_typical_sugar = 0.3
     p_high_sugar = 0.1
+    alternative_dns = ""
+    alternative_ds = ""
 
     def __init__ (self):
         self.cm = model.process()
@@ -35,17 +36,23 @@ class View:
         # Expected value if harvesting now
         ev_h = 80000 * 12
 
+        ev_dns_waiting = p_ns_dns*ev_ns + (1-p_ns_dns)*ev_s
+        ev_ds_waiting = p_s_ds*ev_s + (1-p_s_ds)*ev_ns
         # Maxinum expected value with a detection of storm
-        ev_ds = max(ev_h, (p_s_ds*ev_s + (1-p_s_ds)*ev_ns))
+        ev_ds = max(ev_h, ev_ds_waiting)
         # Maxinum expected value with a detection of no storm
-        ev_dns = max(ev_h, (p_ns_dns*ev_ns + (1-p_ns_dns)*ev_s))
+        ev_dns = max(ev_h, ev_dns_waiting)
 
         # e-value 
         self.e_value = p_dns * ev_dns + p_ds * ev_ds
 
-        if self.e_value > ev_h:
-            self.alternative = "Keep waiting"
+        if ev_ds_waiting > ev_h:
+            self.alternative_ds = "keep waiting"
         else:
-            self.alternative = "Harvest now"
+            self.alternative_ds = "harvest now"
 
+        if ev_dns_waiting > ev_h:
+            self.alternative_dns = "keep waiting"
+        else:
+            self.alternative_dns = "harvest now"
 
